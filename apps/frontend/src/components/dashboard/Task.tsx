@@ -44,6 +44,7 @@ import {mutate} from 'swr';
 export type QType = 0 | 1 | 2 | 3 | 4 | 5;
 
 const newTheme = {
+	// @ts-ignore
 	h1: props => {
 		const {children} = props;
 		return (
@@ -52,6 +53,7 @@ const newTheme = {
 			</Heading>
 		);
 	},
+	// @ts-ignore
 	h2: props => {
 		const {children} = props;
 		return (
@@ -60,6 +62,7 @@ const newTheme = {
 			</Heading>
 		);
 	},
+	// @ts-ignore
 	h3: props => {
 		const {children} = props;
 		return (
@@ -68,6 +71,7 @@ const newTheme = {
 			</Heading>
 		);
 	},
+	// @ts-ignore
 	a: props => {
 		const {children} = props;
 		return (
