@@ -1,6 +1,5 @@
-import type {User} from '@prisma/client';
 import {StrictOmit} from './utils';
-import {Task, TaskInfo} from '@prisma/client';
+import {Task, TaskInfo, User} from '@prisma/client';
 
 export type PrivateUser = StrictOmit<User, 'password' | 'habiticaApiKey'>;
 export type TaskType = {
