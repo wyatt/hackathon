@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import {PrivateUser} from '@todor/shared';
+import {APITask, PrivateUser} from '@todor/shared';
 import {Tag} from '@prisma/client';
 
 export function useMe() {
@@ -8,4 +8,8 @@ export function useMe() {
 
 export function useTags() {
 	return useSWR<Tag[] | null>('/tags');
+}
+
+export function useTasks() {
+	return useSWR<APITask[] | null>('/tasks');
 }

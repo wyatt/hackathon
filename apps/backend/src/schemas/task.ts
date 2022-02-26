@@ -6,3 +6,8 @@ export const taskSchema = object({
 	priority: number().max(3).min(0),
 	tags: array(string()),
 });
+
+export const updateTaskSchema = object({
+	id: string().nonempty(),
+	q: number().max(5).min(0),
+});

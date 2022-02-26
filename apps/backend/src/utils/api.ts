@@ -33,7 +33,7 @@ export function wrapCatch<T>(
 				e instanceof HttpException
 					? e.message
 					: e instanceof ZodError
-					? `Validation error: ${e.errors[0].message} for ${e.errors[0].path}`
+					? `Validation error: ${e.errors[0]!.message} for ${e.errors[0]!.path}`
 					: env.NodeEnv === 'development'
 					? (e as {message: T}).message
 					: 'Something went wrong';

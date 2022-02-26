@@ -19,3 +19,8 @@ export const userSchema = object({
 export const loginUserSchema = object({email, password, remember});
 export const registerUserSchema = object({name, email, password});
 export const updateUserSchema = object({name, email, password}).partial();
+
+export const habiticaSchema = object({
+	userId: string(),
+	apiKey: string(),
+});

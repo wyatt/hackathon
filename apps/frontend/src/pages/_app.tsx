@@ -8,6 +8,7 @@ import {globalToastOptions} from '../utils/toast';
 import * as React from 'react';
 import Head from 'next/head';
 import {ChakraProvider} from '@chakra-ui/react';
+import {TopBar} from '../components/global/Topbar';
 
 const App = ({Component, pageProps}: AppProps) => {
 	return (

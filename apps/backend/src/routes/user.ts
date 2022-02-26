@@ -11,7 +11,7 @@ export const users = resource<PrivateUser>({
 	async PATCH(req) {
 		const {user: id} = await getSession(req);
 		const updatedUser = userSchema.parse(req.body);
-		const {password, ...user} = await prisma.user.update({
+		const {password, habiticaApiKey, ...user} = await prisma.user.update({
 			where: {
 				id,
 			},
@@ -22,20 +22,20 @@ export const users = resource<PrivateUser>({
 					: {}),
 			},
 		});
-		return {...user, avatar_hash: md5(user.email)};
+		return {...user};
 	},
 	async DELETE(req) {
 		const {user: id} = await getSession(req);
 
 		//TODO: Add custom task_info deletion
-		const [{password, ...user}] = await prisma.$transaction([
+		const [{password, habiticaApiKey, ...user}] = await prisma.$transaction([
 			prisma.user.delete({
 				where: {
 					id,
 				},
 			}),
 		]);
-		return {...user, avatar_hash: md5(user.email)};
+		return {...user};
 	},
 	async POST(req, res) {
 		const reqUser = loginUserSchema.parse(req.body);
@@ -60,9 +60,9 @@ export const users = resource<PrivateUser>({
 
 		const cookie = generateCookie(token, expiry);
 		res.setHeader('Set-Cookie', cookie);
-		const {password, ...user} = queryUser;
+		const {password, habiticaApiKey, ...user} = queryUser;
 
-		return {...user, avatar_hash: md5(user.email)};
+		return {...user};
 	},
 	async PUT(req) {
 		const newUser = registerUserSchema.parse(req.body);
@@ -73,13 +73,13 @@ export const users = resource<PrivateUser>({
 		});
 		if (existingUser) throw new HttpException(409, 'Email already in use');
 
-		const {password, ...user} = await prisma.user.create({
+		const {password, habiticaApiKey, ...user} = await prisma.user.create({
 			data: {
 				name: newUser.name,
 				email: newUser.email,
 				password: await hash(newUser.password, 12),
 			},
 		});
-		return {...user, avatar_hash: md5(newUser.email)};
+		return {...user};
 	},
 });

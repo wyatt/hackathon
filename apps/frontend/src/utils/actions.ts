@@ -1,6 +1,7 @@
 import {fetcher} from './network';
-import {PrivateUser, TaskType} from '@todor/shared';
+import {APITask, PrivateUser, TaskType} from '@todor/shared';
 import {TaskInfo} from '@prisma/client';
+import {QType} from '../components/dashboard/Task';
 
 export function useActions() {
 	return {
@@ -15,7 +16,16 @@ export function useActions() {
 			return fetcher<'OK'>('POST', '/logout');
 		},
 		taskCreate(params: TaskType) {
-			return fetcher<TaskInfo>('PUT', '/tasks', params);
+			return fetcher<APITask>('PUT', '/tasks', params);
+		},
+		taskDelete(params: {id: string}) {
+			return fetcher<TaskInfo>('DELETE', '/tasks', params);
+		},
+		taskUpdate(params: {id: string; q: QType}) {
+			return fetcher<APITask>('PATCH', '/tasks', params);
+		},
+		linkHabitica(params: {userId: string; apiKey: string}) {
+			return fetcher<'OK'>('POST', '/habitica', params);
 		},
 	};
 }

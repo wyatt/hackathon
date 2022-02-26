@@ -3,7 +3,6 @@ import {PrivateUser} from '@todor/shared';
 import {getSession} from '../utils/session';
 import {wrapRedis} from '../utils/wrap-redis';
 import {prisma} from '../prisma';
-import md5 from 'md5';
 
 export const me = resource<PrivateUser>({
 	async GET(req) {
@@ -17,8 +16,8 @@ export const me = resource<PrivateUser>({
 			throw new HttpException(500, 'Unknown User');
 		}
 
-		const {password, ...rest} = user;
+		const {password, habiticaApiKey, ...rest} = user;
 
-		return {...rest, avatar_hash: md5(rest.email)};
+		return {...rest};
 	},
 });

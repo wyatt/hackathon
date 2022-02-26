@@ -8,14 +8,16 @@ datasource db {
 }
 
 model User {
-  id           String     @id @default(uuid())
-  name         String
-  email        String     @unique
-  password     String
-  registeredAt DateTime   @default(now())
-  streak       Int        @default(0)
-  tags         Tag[]
-  tasks        TaskInfo[]
+  id             String     @id @default(uuid())
+  name           String
+  email          String     @unique
+  password       String
+  registeredAt   DateTime   @default(now())
+  streak         Int        @default(0)
+  tags           Tag[]
+  tasks          TaskInfo[]
+  habiticaUserId String?
+  habiticaApiKey String?
 
   @@map("users")
 }
@@ -34,13 +36,14 @@ model TaskInfo {
 }
 
 model Task {
-  id         String   @id @default(uuid())
-  info       TaskInfo @relation(fields: [taskInfoId], references: [id])
-  done       Boolean  @default(false)
-  due        DateTime
-  completed  DateTime
-  ef         Float    @default(2.5)
-  taskInfoId String
+  id             String    @id @default(uuid())
+  info           TaskInfo  @relation(fields: [taskInfoId], references: [id], onDelete: Cascade)
+  due            DateTime
+  completed      DateTime?
+  ef             Float     @default(2.5)
+  taskInfoId     String
+  q              Int?
+  habiticaTaskId String?
 }
 
 model Tag {
@@ -50,6 +53,7 @@ model Tag {
   color  String
   user   User       @relation(fields: [userId], references: [id])
   userId String
+
 
   @@unique([name, userId])
   @@map("tags")
