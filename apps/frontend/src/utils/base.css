@@ -1,0 +1,21 @@
+html,
+body,
+#__next {
+	/*height: auto;*/
+	width: 100%;
+	/*min-height: 100vh;*/
+	/*height: 100%;*/
+}
+
+body,
+#__next {
+	display: flex;
+	flex-direction: column;
+	/*noinspection CssUnresolvedCustomProperty*/
+	background-color: white;
+}
+
+html {
+	/*padding-left: calc(100vw - 100%) !important;*/
+	overflow-y: scroll;
+}

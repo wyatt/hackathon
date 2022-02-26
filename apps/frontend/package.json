@@ -1,0 +1,40 @@
+{
+	"name": "@todor/frontend",
+	"version": "0.1.0",
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start"
+	},
+	"dependencies": {
+		"@chakra-ui/react": "^1.8.3",
+		"@emotion/react": "11",
+		"@emotion/styled": "11",
+		"@fontsource/lexend": "^4.2.1",
+		"@splitbee/web": "^0.3.0",
+		"@todor/shared": "workspace:^",
+		"dayjs": "^1.10.6",
+		"formik": "^2.2.6",
+		"formik-chakra-ui": "^1.4.6",
+		"framer-motion": "4",
+		"jotai": "^1.2.2",
+		"next": "12",
+		"prettier": "^2.3.2",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-hot-toast": "^1.0.2",
+		"react-icons": "^4.2.0",
+		"react-rewards": "https://github.com/wyatt/react-rewards.git",
+		"react-text-loop": "^2.3.0",
+		"react-use-system-color-mode": "^1.0.4",
+		"reaviz": "10.3.0",
+		"sharp": "^0.30.0",
+		"swr": "^0.5.5",
+		"zod": "^3.0.0-beta.1"
+	},
+	"devDependencies": {
+		"@types/node": "^17.0.18",
+		"@types/react": "^17.0.39",
+		"typescript": "^4.5.5"
+	}
+}

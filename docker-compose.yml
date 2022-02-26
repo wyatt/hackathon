@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  redis:
+    image: redis
+    ports:
+      - '56379:6379'
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: node
+      POSTGRES_PASSWORD: nodejs
+      POSTGRES_DB: todor
+    ports:
+      - '5432:5432'

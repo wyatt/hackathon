@@ -1,0 +1,12 @@
+{
+	"name": "@todor/shared",
+	"version": "1.0.0",
+	"license": "MIT",
+	"main": "dist/todor-shared.cjs.js",
+	"module": "dist/todor-shared.esm.js",
+	"typings": "dist/todor-shared.cjs.d.ts",
+	"devDependencies": {
+		"@types/node": "^17.0.10",
+		"typescript": "^4.5.5"
+	}
+}

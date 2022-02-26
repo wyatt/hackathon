@@ -1,0 +1,45 @@
+{
+	"name": "todor",
+	"private": true,
+	"version": "1.0.0",
+	"repository": "https://github.com/revisionapp/revisio.git",
+	"author": "wyatt <profwyattb@gmail.com>",
+	"license": "MIT",
+	"packageManager": "yarn@3.1.1",
+	"scripts": {
+		"server": "yarn workspace @todor/backend dev",
+		"server-build": "yarn packages-build && yarn workspace @todor/backend build",
+		"server-start": "yarn workspace @todor/backend start",
+		"client": "yarn workspace @todor/frontend dev",
+		"client-build": "yarn packages-build && yarn workspace @todor/frontend build",
+		"client-start": "yarn workspace @todor/frontend start",
+		"db:generate": "yarn prisma generate",
+		"db:migrate-dev": "yarn prisma migrate dev",
+		"db:migrate-prod": "yarn prisma migrate deploy",
+		"packages-build": "yarn preconstruct build",
+		"heroku-postbuild": "yarn db:generate && yarn db:migrate-prod && yarn server-build"
+	},
+	"workspaces": [
+		"packages/*",
+		"apps/*"
+	],
+	"preconstruct": {
+		"packages": [
+			"packages/*"
+		]
+	},
+	"dependencies": {
+		"@prisma/client": "^3.9.1"
+	},
+	"devDependencies": {
+		"@babel/preset-env": "^7.16.11",
+		"@babel/preset-typescript": "^7.16.7",
+		"@faker-js/faker": "^6.0.0-alpha.5",
+		"@preconstruct/cli": "^2.1.5",
+		"prettier": "^2.5.1",
+		"prisma": "^3.9.1"
+	},
+	"prisma": {
+		"seed": "node prisma/seed.js"
+	}
+}
