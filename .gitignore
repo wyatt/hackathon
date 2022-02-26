@@ -4,10 +4,8 @@ apps/frontend/.env.local
 .vercel
 .idea/
 .DS_Store
-.yarn
 export/
 prisma/.env
-
 # Logs
 logs
 *.log
