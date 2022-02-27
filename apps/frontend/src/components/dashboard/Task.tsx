@@ -2,7 +2,6 @@ import {
 	Box,
 	Button,
 	ButtonGroup,
-	Checkbox,
 	FormControl,
 	FormLabel,
 	Heading,
@@ -135,7 +134,10 @@ export const Task = (props: {
 							{'!'.repeat(props.task.priority)}
 						</Tag>
 					)}
-					<Tag>{dayjs(task.due).format('MMM D')}</Tag>
+					<Tag colorScheme={props.hue}>
+						Repeats: {props.task.tasks.filter(t => t.completed).length}
+					</Tag>
+					<Tag colorScheme={props.hue}>{dayjs(task.due).format('MMM D')}</Tag>
 					<Button
 						size={'xs'}
 						onClick={() => setRevealDescription(r => !r)}
