@@ -40,7 +40,7 @@ app.use(
 		origin:
 			env.NodeEnv === 'development'
 				? 'http://localhost:3000'
-				: 'https://hackathon-six.vercel.app',
+				: ['https://hackathon-six.vercel.app', 'https://todor.wyattsell.com'],
 		credentials: true,
 	})
 );
