@@ -13,7 +13,7 @@ interface Session {
 	at: Date | string;
 }
 
-const cookieName = '_revisio_sess';
+const cookieName = '_todor_sess';
 
 export async function getSession(req: Request): Promise<Session> {
 	const key = sessionKeyFromRequest(req);
@@ -70,7 +70,7 @@ export function generateCookie(key: string, expires: Date) {
 		httpOnly: true,
 		secure: process.env.NODE_ENV !== 'development',
 		path: '/',
-		sameSite: 'strict',
+		sameSite: 'none',
 		expires,
 	});
 }
