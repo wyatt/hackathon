@@ -198,6 +198,7 @@ export const tasks = resource<TaskInfo | APITask[]>({
 					},
 					body: JSON.stringify({
 						text: `${taskInfoToUpdate.name} (${taskInfoToUpdate.priority})`,
+						type: 'todo',
 						notes: taskInfoToUpdate.description,
 						date: dayjs(updatedTask.due).add(interRepInterval, 'days').toDate(),
 					}),
