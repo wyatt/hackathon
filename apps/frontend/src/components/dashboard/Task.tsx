@@ -170,7 +170,7 @@ export const Task = (props: {
 						animate="open"
 						exit="collapsed"
 						variants={{
-							open: {transform: 'scaleY(1)', maxHeight: '500px'},
+							open: {transform: 'scaleY(1)', maxHeight: '1000px'},
 							collapsed: {transform: 'scaleY(0)', maxHeight: 0},
 						}}
 						transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
