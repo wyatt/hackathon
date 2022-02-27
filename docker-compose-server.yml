@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3'
 services:
   backend:
     build:
@@ -11,7 +11,7 @@ services:
       - .env.backend.prod # The rest of the env vars (see default .env in backend) are private, so should be defined locally
     environment:
       REDIS_URL: redis://redis:6379
-      DATABASE_URL: postgresql://node:nodejs@postgres:5432/todor
+      DATABASE_URL: postgresql://node:nodejs@db:5432/todor
       NODE_ENV: production
       PORT: 8080
 
@@ -30,3 +30,8 @@ services:
       POSTGRES_DB: todor
     ports:
       - '56378:5432'
+    volumes:
+      - db_data:/postgres/data
+
+volumes:
+  db_data:
