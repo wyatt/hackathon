@@ -42,7 +42,7 @@ export const tasks = resource<TaskInfo | APITask[]>({
 				},
 				body: JSON.stringify({
 					text: `${params.name}${
-						params.priority > 0 ? '!'.repeat(params.priority) : ''
+						params.priority > 0 ? ' ' + '!'.repeat(params.priority) : ''
 					}`,
 					type: 'todo',
 					notes: params.description,
@@ -197,7 +197,11 @@ export const tasks = resource<TaskInfo | APITask[]>({
 						'x-client': `${user.habiticaUserId}-Todor`,
 					},
 					body: JSON.stringify({
-						text: `${taskInfoToUpdate.name} (${taskInfoToUpdate.priority})`,
+						text: `${taskInfoToUpdate.name}${
+							taskInfoToUpdate.priority > 0
+								? ' ' + '!'.repeat(taskInfoToUpdate.priority)
+								: ''
+						}`,
 						type: 'todo',
 						notes: taskInfoToUpdate.description,
 						date: dayjs(updatedTask.due).add(interRepInterval, 'days').toDate(),
@@ -271,8 +275,6 @@ export const tasks = resource<TaskInfo | APITask[]>({
 						},
 					}
 				).then(res => res.json());
-
-				signale.log(res);
 			}
 		}
 
