@@ -17,6 +17,7 @@
 		"db:migrate-dev": "yarn prisma migrate dev",
 		"db:migrate-prod": "yarn prisma migrate deploy",
 		"packages-build": "yarn preconstruct build",
+		"docker-start": "yarn db:migrate-prod && yarn server-start",
 		"heroku-postbuild": "yarn db:generate && yarn db:migrate-prod && yarn server-build"
 	},
 	"workspaces": [

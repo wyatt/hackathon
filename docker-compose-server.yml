@@ -1,0 +1,37 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '56377:8080'
+    env_file:
+      - .env.backend.prod # The rest of the env vars (see default .env in backend) are private, so should be defined locally
+    environment:
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://node:nodejs@db:5432/todor
+      NODE_ENV: production
+      PORT: 8080
+
+  redis:
+    image: redis
+    restart: unless-stopped
+    ports:
+      - '56379:6379'
+
+  db:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: node
+      POSTGRES_PASSWORD: nodejs
+      POSTGRES_DB: todor
+    ports:
+      - '56378:5432'
+    volumes:
+      - db_data:/postgres/data
+
+volumes:
+  db_data:
