@@ -27,6 +27,34 @@ export const tasks = resource<TaskInfo | APITask[]>({
 		const {user: id} = await getSession(req);
 		const {tags, ...params} = taskSchema.parse(req.body);
 
+		const user = (await prisma.user.findUnique({where: {id}}))!;
+
+		let habiticaId = null;
+
+		if (user.habiticaUserId && user.habiticaApiKey) {
+			const res = (await fetch('https://habitica.com/api/v3/tasks/user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'x-api-user': user.habiticaUserId,
+					'x-api-key': user.habiticaApiKey,
+					'x-client': `${user.habiticaUserId}-Todor`,
+				},
+				body: JSON.stringify({
+					text: `${params.name}${
+						params.priority > 0 ? '!'.repeat(params.priority) : ''
+					}`,
+					type: 'todo',
+					notes: params.description,
+					date: dayjs().toDate(),
+				}),
+			}).then(res => res.json())) as {success: boolean; data: {id: string}};
+
+			if (res.success) {
+				habiticaId = res.data.id;
+			}
+		}
+
 		const task = await prisma.taskInfo.create({
 			data: {
 				...params,
@@ -43,6 +71,7 @@ export const tasks = resource<TaskInfo | APITask[]>({
 						data: [
 							{
 								due: dayjs().toDate(),
+								habiticaTaskId: habiticaId,
 							},
 						],
 					},
@@ -52,26 +81,6 @@ export const tasks = resource<TaskInfo | APITask[]>({
 				tasks: true,
 			},
 		});
-
-		const user = (await prisma.user.findUnique({where: {id}}))!;
-
-		if (user.habiticaUserId && user.habiticaApiKey) {
-			await fetch('https://habitica.com/api/v3/tasks/user', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'x-api-user': user.habiticaUserId,
-					'x-api-key': user.habiticaApiKey,
-					'x-client': `${user.habiticaUserId}-Todor`,
-				},
-				body: JSON.stringify({
-					text: `${task.name} (${task.priority})`,
-					type: 'todo',
-					notes: task.description,
-					date: dayjs().toDate(),
-				}),
-			});
-		}
 
 		return task;
 	},
@@ -124,9 +133,18 @@ export const tasks = resource<TaskInfo | APITask[]>({
 			user.habiticaUserId &&
 			user.habiticaApiKey
 		) {
-			await fetch(
-				`https://habitica.com/api/v3/tasks/${updatedTask.habiticaTaskId}/score/up`
-			);
+			const res = await fetch(
+				`https://habitica.com/api/v3/tasks/${updatedTask.habiticaTaskId}/score/up`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'x-api-user': user.habiticaUserId,
+						'x-api-key': user.habiticaApiKey,
+						'x-client': `${user.habiticaUserId}-Todor`,
+					},
+				}
+			).then(res => res.json());
 		}
 
 		const idx =
@@ -183,10 +201,10 @@ export const tasks = resource<TaskInfo | APITask[]>({
 						notes: taskInfoToUpdate.description,
 						date: dayjs(updatedTask.due).add(interRepInterval, 'days').toDate(),
 					}),
-				}).then(res => res.json())) as {success: boolean; data: {_id: string}};
+				}).then(res => res.json())) as {success: boolean; data: {id: string}};
 
 				if (res.success) {
-					habiticaTaskId = res.data._id;
+					habiticaTaskId = res.data.id;
 				}
 			}
 		}
@@ -228,10 +246,34 @@ export const tasks = resource<TaskInfo | APITask[]>({
 				id,
 				userId,
 			},
+			include: {
+				tasks: true,
+			},
 		});
 
 		if (!taskExistsOnUser)
 			throw new HttpException(404, 'Task could not be found');
+
+		const user = (await prisma.user.findUnique({where: {id: userId}}))!;
+
+		for (const task of taskExistsOnUser.tasks) {
+			if (task.habiticaTaskId && user.habiticaUserId && user.habiticaApiKey) {
+				const res = await fetch(
+					`https://habitica.com/api/v3/tasks/user/${task.habiticaTaskId}`,
+					{
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+							'x-api-user': user.habiticaUserId,
+							'x-api-key': user.habiticaApiKey,
+							'x-client': `${user.habiticaUserId}-Todor`,
+						},
+					}
+				).then(res => res.json());
+
+				signale.log(res);
+			}
+		}
 
 		const task = await prisma.taskInfo.delete({
 			where: {
