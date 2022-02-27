@@ -40,7 +40,7 @@ app.use(
 		origin:
 			env.NodeEnv === 'development'
 				? 'http://localhost:3000'
-				: 'https://www.revisio.app',
+				: 'https://hackathon-six.vercel.app',
 		credentials: true,
 	})
 );
