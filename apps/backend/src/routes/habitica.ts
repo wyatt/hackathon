@@ -3,8 +3,10 @@ import {getSession} from '../utils/session';
 import {habiticaSchema} from '../schemas/user';
 import {prisma} from '../prisma';
 import fetch from 'node-fetch';
+import {PrivateUser} from '@todor/shared';
+import {redis} from '../utils/wrap-redis';
 
-export const habitica = resource({
+export const habitica = resource<'OK' | PrivateUser>({
 	async POST(req) {
 		const {user: id} = await getSession(req);
 		const {userId, apiKey} = habiticaSchema.parse(req.body);
@@ -21,12 +23,31 @@ export const habitica = resource({
 		if (!habticaUser.success)
 			throw new HttpException(401, 'Invalid credentials');
 
-		await prisma.user.update({
+		const {habiticaApiKey, password, ...user} = await prisma.user.update({
 			where: {id},
 			data: {
 				habiticaUserId: userId,
 				habiticaApiKey: apiKey,
 			},
 		});
+
+		await redis.del(`@me:${id}`);
+
+		return user;
+	},
+	async DELETE(req) {
+		const {user: id} = await getSession(req);
+
+		const {password, habiticaApiKey, ...user} = await prisma.user.update({
+			where: {id},
+			data: {
+				habiticaUserId: null,
+				habiticaApiKey: null,
+			},
+		});
+
+		await redis.del(`@me:${id}`);
+
+		return user;
 	},
 });

@@ -5,7 +5,7 @@ import {
 	FormLabel,
 	HStack,
 	Input,
-	Textarea,
+	Text,
 	VStack,
 } from '@chakra-ui/react';
 import {HabitcaCredentials} from '@todor/shared/src/index';
@@ -16,6 +16,7 @@ import {TopBar} from '../components/global/Topbar';
 import * as React from 'react';
 import {useActions} from '../utils/actions';
 import {useMe} from '../utils/hooks';
+import {mutate} from 'swr';
 
 export default () => {
 	return (
@@ -47,8 +48,15 @@ const LinkHabitica = () => {
 	};
 
 	const submitHabitica = async () => {
-		await actions.linkHabitica(credentials);
-		console.log('Linked');
+		const user = await actions.linkHabitica(credentials);
+		await mutate('/@me', user);
+		setCredentials({userId: '', apiKey: ''});
+	};
+
+	const unlinkHabitica = async () => {
+		const user = await actions.unlinkHabitica();
+		await mutate('/@me', user);
+		setCredentials({userId: '', apiKey: ''});
 	};
 
 	return (
@@ -56,20 +64,25 @@ const LinkHabitica = () => {
 			<FormControl mt={4} isRequired>
 				<FormLabel>User ID</FormLabel>
 				<Input
-					placeholder="User ID"
+					placeholder={me.habiticaUserId ?? 'User ID'}
 					onChange={e => credentialParser('userId', e.target.value)}
 				/>
 			</FormControl>
 			<FormControl mt={4} isRequired>
 				<FormLabel>API Key</FormLabel>
 				<Input
-					placeholder="API Key"
+					placeholder={me.habiticaUserId ? 'Unchanged' : 'API Key'}
 					onChange={e => credentialParser('apiKey', e.target.value)}
 				/>
 			</FormControl>
-			<HStack>
+
+			<HStack w="full" justifyContent={'flex-end'} pt={2}>
 				{me.habiticaUserId && (
-					<Button colorScheme={'red'} variant={'outline'}>
+					<Button
+						colorScheme={'red'}
+						variant={'outline'}
+						onClick={unlinkHabitica}
+					>
 						Unlink
 					</Button>
 				)}
@@ -81,6 +94,10 @@ const LinkHabitica = () => {
 					Link Habitica
 				</Button>
 			</HStack>
+			<Text color={'red'}>
+				⚠️ Warning: Your tasks will not be <strong>deleted</strong> in Habitica.
+				This is an issue with the Habitica API
+			</Text>
 		</VStack>
 	);
 };

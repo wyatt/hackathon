@@ -25,7 +25,10 @@ export function useActions() {
 			return fetcher<APITask>('PATCH', '/tasks', params);
 		},
 		linkHabitica(params: {userId: string; apiKey: string}) {
-			return fetcher<'OK'>('POST', '/habitica', params);
+			return fetcher<PrivateUser>('POST', '/habitica', params);
+		},
+		unlinkHabitica() {
+			return fetcher<PrivateUser>('DELETE', '/habitica');
 		},
 	};
 }
