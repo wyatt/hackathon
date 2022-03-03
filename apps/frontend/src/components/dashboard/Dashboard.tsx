@@ -42,8 +42,10 @@ export const Dashboard = () => {
 				<CreateTaskModal />
 			</HStack>
 			<TaskList
-				tasks={tasks.filter(t =>
-					dayjs(lt(t).due).isBefore(dayjs().startOf('day'))
+				tasks={tasks.filter(
+					t =>
+						dayjs(lt(t).due).isBefore(dayjs().startOf('day')) ||
+						(slt(t)?.due && dayjs(slt(t)!.due).isBefore(dayjs().startOf('day')))
 				)}
 				title={'OVERDUE'}
 				i={0}
@@ -53,7 +55,7 @@ export const Dashboard = () => {
 				tasks={tasks.filter(
 					t =>
 						dayjs(lt(t).due).isSame(dayjs(), 'day') ||
-						(slt(t)?.due && dayjs(slt(t)?.due).isSame(dayjs(), 'day'))
+						(slt(t)?.due && dayjs(slt(t)!.due).isSame(dayjs(), 'day'))
 				)}
 				title={'TODAY'}
 				i={1}
