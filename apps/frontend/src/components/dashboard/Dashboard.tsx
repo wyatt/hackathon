@@ -53,7 +53,7 @@ export const Dashboard = () => {
 				tasks={tasks.filter(
 					t =>
 						dayjs(lt(t).due).isSame(dayjs(), 'day') ||
-						dayjs(slt(t).due).isSame(dayjs(), 'day')
+						(slt(t)?.due && dayjs(slt(t)?.due).isSame(dayjs(), 'day'))
 				)}
 				title={'TODAY'}
 				i={1}
@@ -100,6 +100,8 @@ const TaskList = (props: {
 	if (!props.tasks.length) return null;
 	const hue =
 		hueList[(dayjs().diff(dayjs().startOf('year'), 'days') + props.i) % 9]!;
+
+	console.log(props.title, props.tasks);
 	return (
 		<VStack mt={10} alignItems={'flex-start'}>
 			<Text fontWeight={700}>{props.title}</Text>
@@ -120,4 +122,4 @@ const TaskList = (props: {
 
 export const lt = (t: APITask) => t.tasks.filter(t => !t.completed)[0]!;
 export const slt = (t: APITask) =>
-	t.tasks.filter(t => t.completed).reverse()[0]!;
+	t.tasks.filter(t => t.completed).reverse()[0];

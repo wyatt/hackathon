@@ -91,7 +91,9 @@ export const Task = (props: {
 	const [revealChart, setRevealChart] = useState<boolean>(false);
 
 	const actions = useActions();
-	const task = props.task.tasks.find(t => props.findFn(dayjs(t.due)))!;
+	const task = props.task.tasks
+		.reverse()
+		.find(t => props.findFn(dayjs(t.due)))!;
 
 	const deleteTask = async () => {
 		await actions.taskDelete({id: props.task.id});
@@ -99,6 +101,8 @@ export const Task = (props: {
 			t.filter(task => task.id !== props.task.id)
 		);
 	};
+
+	//console.log(task);
 
 	return (
 		<VStack
