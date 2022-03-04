@@ -116,6 +116,7 @@ export const Task = (props: {
 					? `${props.hue}.${Math.min(200 + props.i * 100, 900)}`
 					: '#fff'
 			}
+			color={task.completed ? 'white' : undefined}
 			spacing={0}
 		>
 			<HStack w={'full'} justifyContent={'space-between'} p={4}>

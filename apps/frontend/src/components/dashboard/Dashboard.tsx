@@ -45,7 +45,10 @@ export const Dashboard = () => {
 				tasks={tasks.filter(
 					t =>
 						dayjs(lt(t).due).isBefore(dayjs().startOf('day')) ||
-						(slt(t)?.due && dayjs(slt(t)!.due).isBefore(dayjs().startOf('day')))
+						(slt(t)?.due &&
+							dayjs(slt(t)!.due).isBefore(dayjs().startOf('day')) &&
+							slt(t)?.completed &&
+							!dayjs(slt(t)!.completed).isBefore(dayjs().startOf('day')))
 				)}
 				title={'OVERDUE'}
 				i={0}
@@ -103,7 +106,6 @@ const TaskList = (props: {
 	const hue =
 		hueList[(dayjs().diff(dayjs().startOf('year'), 'days') + props.i) % 9]!;
 
-	console.log(props.title, props.tasks);
 	return (
 		<VStack mt={10} alignItems={'flex-start'}>
 			<Text fontWeight={700}>{props.title}</Text>
