@@ -29,12 +29,19 @@ export const Dashboard = () => {
 			tasks: t.tasks.sort((a, b) => (dayjs(a.due).isBefore(b.due) ? -1 : 1)),
 		}));
 
-	const dueTasks = tasks.filter(t =>
-		dayjs(lt(t).due).isBefore(dayjs().add(1, 'day'))
+	const dueTasks = tasks.filter(
+		t =>
+			dayjs(lt(t).due).isBefore(dayjs().startOf('day')) ||
+			(slt(t)?.due &&
+				dayjs(slt(t)!.due).isBefore(dayjs().startOf('day')) &&
+				slt(t)?.completed &&
+				!dayjs(slt(t)!.completed).isBefore(dayjs().startOf('day'))) ||
+			dayjs(lt(t).due).isSame(dayjs(), 'day') ||
+			(slt(t)?.due && dayjs(slt(t)!.due).isSame(dayjs(), 'day'))
 	);
 
 	return (
-		<Container maxW={'5xl'} w={'full'} textAlign={'left'}>
+		<Container maxW={'5xl'} w={'full'} textAlign={'left'} pb={10}>
 			<TopBar />
 			<HStack w={'full'} justifyContent={'space-between'} mt={24}>
 				<Heading>
