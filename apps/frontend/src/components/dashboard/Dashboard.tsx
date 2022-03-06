@@ -22,9 +22,12 @@ export const Dashboard = () => {
 	const {data: allTasks} = useTasks();
 	if (!me || !allTasks) return null;
 
-	const tasks = allTasks.filter(
-		t => !dayjs(lt(t).completed).isBefore(dayjs().startOf('day'))
-	);
+	const tasks = allTasks
+		.filter(t => !dayjs(lt(t).completed).isBefore(dayjs().startOf('day')))
+		.map(t => ({
+			...t,
+			tasks: t.tasks.sort((a, b) => (dayjs(a.due).isBefore(b.due) ? -1 : 1)),
+		}));
 
 	const dueTasks = tasks.filter(t =>
 		dayjs(lt(t).due).isBefore(dayjs().add(1, 'day'))
