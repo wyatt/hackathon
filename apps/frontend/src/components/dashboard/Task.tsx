@@ -148,6 +148,7 @@ export const Task = (props: {
 						onClick={() => setRevealDescription(r => !r)}
 						variant={revealDescription ? 'solid' : 'ghost'}
 						colorScheme={props.hue}
+						color={task.completed ? 'white' : undefined}
 					>
 						<RiInformationLine />
 					</Button>
@@ -156,6 +157,7 @@ export const Task = (props: {
 						onClick={() => setRevealChart(r => !r)}
 						variant={revealChart ? 'solid' : 'ghost'}
 						colorScheme={props.hue}
+						color={task.completed ? 'white' : undefined}
 					>
 						<RiLineChartLine />
 					</Button>
@@ -165,7 +167,11 @@ export const Task = (props: {
 				</HStack>
 			</HStack>
 			{revealDescription && (
-				<Heading size={'sm'} p={2} color={props.hue + '.700'}>
+				<Heading
+					size={'sm'}
+					p={2}
+					color={props.hue + (task.completed ? '.300' : '.700')}
+				>
 					DESCRIPTION
 				</Heading>
 			)}
@@ -188,7 +194,7 @@ export const Task = (props: {
 						}}
 					>
 						<VStack p={4} alignItems={'flex-start'}>
-							<Box w={'full'}>
+							<Box w={'full'} color={'black'}>
 								<ReactMarkdown
 									components={ChakraUIRenderer(newTheme)}
 									children={props.task.description}
@@ -200,7 +206,11 @@ export const Task = (props: {
 				)}
 			</AnimatePresence>
 			{revealChart && (
-				<Heading size={'sm'} p={2} color={props.hue + '.700'}>
+				<Heading
+					size={'sm'}
+					p={2}
+					color={props.hue + (task.completed ? '.300' : '.700')}
+				>
 					CHART
 				</Heading>
 			)}
